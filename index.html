@@ -18,10 +18,10 @@
             justify-content: center;
             background: linear-gradient(135deg, #74ebd5 0%, #9face6 100%);
             color: #333;
-            overflow: hidden; /* Empêche le défilement accidentel en cliquant vite */
+            overflow: hidden;
         }
 
-        /* Conteneur du menu (Glassmorphism) */
+        /* Conteneur du menu */
         #menu-screen {
             background: rgba(255, 255, 255, 0.85);
             padding: 40px;
@@ -61,7 +61,7 @@
             top: 0; left: 0; right: 0; bottom: 0;
             width: 100vw;
             height: 100vh;
-            cursor: crosshair; /* Curseur cible pour montrer qu'on peut cliquer */
+            cursor: crosshair;
             z-index: 5;
         }
 
@@ -75,7 +75,7 @@
             font-weight: bold;
             color: white;
             text-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            pointer-events: none; /* TRÈS IMPORTANT : Les clics traversent le texte */
+            pointer-events: none;
             width: 100%;
         }
 
@@ -88,7 +88,7 @@
             100% { opacity: 0.6; transform: scale(0.95); }
         }
 
-        /* Bouton Quitter (en haut à droite) */
+        /* Bouton Quitter */
         #quit-btn {
             position: absolute;
             top: 20px;
@@ -102,12 +102,17 @@
             border: none;
             border-radius: 8px;
             box-shadow: 0 4px #c0392b;
-            z-index: 20; /* Au-dessus de la zone cliquable */
+            z-index: 20;
         }
         #quit-btn:active { transform: translateY(2px); box-shadow: 0 2px #c0392b; }
     </style>
 </head>
 <body>
+
+    <audio id="bg-music" loop>
+        <source src="musique.mp3" type="audio/mpeg">
+        Votre navigateur ne supporte pas l'audio.
+    </audio>
 
     <div id="menu-screen">
         <h1>Test de Clic Rapide</h1>
@@ -137,35 +142,41 @@
         let gameActive = false;
         let timer;
         
+        // Récupérer la musique
+        const bgMusic = document.getElementById('bg-music');
+        bgMusic.volume = 0.5; // Règle le volume à 50%
+        
         // Récupérer le meilleur score
         let highScore = localStorage.getItem('clicRapideHighScore') || 0;
         document.getElementById('menu-high-score').innerText = highScore;
 
-        // Affiche l'écran de jeu (plein écran)
         function showGameScreen() {
             document.getElementById('menu-screen').style.display = 'none';
             document.getElementById('game-screen').style.display = 'block';
             resetGameVariables();
+            
+            // Démarre la musique
+            bgMusic.play().catch(error => console.log("L'autoplay audio a été bloqué.", error));
         }
 
-        // Retourne au menu
         function returnToMenu(event) {
-            // Empêche le clic sur "Quitter" d'être compté comme un clic de jeu
             if(event) event.stopPropagation(); 
             
             clearInterval(timer);
             gameActive = false;
+            
+            // Arrête et réinitialise la musique
+            bgMusic.pause();
+            bgMusic.currentTime = 0;
+
             document.getElementById('game-screen').style.display = 'none';
             document.getElementById('menu-screen').style.display = 'block';
             document.getElementById('menu-high-score').innerText = highScore;
         }
 
-        // Gère les clics n'importe où sur l'écran
         function handleClick(event) {
-            // Ignore les clics si la cible est le bouton "Quitter"
             if (event.target.id === 'quit-btn') return;
 
-            // Démarre le jeu au premier clic
             if (!gameActive && timeLeft > 0) {
                 gameActive = true;
                 document.getElementById('instruction').style.display = 'none';
@@ -173,7 +184,6 @@
                 startTimer();
             }
 
-            // Incrémente le score
             if (gameActive) {
                 score++;
                 document.getElementById('score-display').innerText = score;
@@ -207,7 +217,7 @@
             setTimeout(() => {
                 alert(message);
                 returnToMenu(); 
-            }, 50); // Léger délai pour que le dernier clic s'affiche
+            }, 50); 
         }
 
         function resetGameVariables() {
@@ -216,7 +226,6 @@
             timeLeft = 30;
             gameActive = false;
             
-            // Remet l'interface à zéro
             document.getElementById('score-display').innerText = score;
             document.getElementById('time').innerText = timeLeft;
             document.getElementById('instruction').style.display = 'block';
