@@ -86,6 +86,126 @@
         #reset-btn {
             padding: 12px 24px;
             font-size: 16px;
-            font-weight: bold
+            font-weight: bold;
+            cursor: pointer;
+            background-color: #e67e22;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px #d35400;
+        }
+        #reset-btn:active { transform: translateY(2px); box-shadow: 0 2px #d35400; }
+        #reset-btn:hover { background-color: #d35400; }
 
+        /* Pour masquer l'écran de jeu au début */
+        #game-screen { display: none; }
+    </style>
+</head>
+<body>
 
+    <div id="game-container">
+        
+        <div id="menu-screen">
+            <h1>Test de Clic Rapide</h1>
+            <p>Avez-vous les doigts les plus rapides ? Vous avez 30 secondes.</p>
+            <div class="stats high-score">🏆 Meilleur Score : <span id="menu-high-score">0</span></div>
+            <button id="start-btn" onclick="showGameScreen()">Commencer à jouer</button>
+        </div>
+
+        <div id="game-screen">
+            <h1>En jeu !</h1>
+            <div class="stats">Temps restant : <span id="time">30</span>s</div>
+            <div class="stats">Score Actuel : <span id="score">0</span></div>
+
+            <div id="game-area">
+                <button id="click-btn" onclick="handleClick()">CLIQUEZ ICI !</button>
+                <br><br>
+                <button id="reset-btn" onclick="returnToMenu()">Retour au menu</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let score = 0;
+        let timeLeft = 30;
+        let gameActive = false;
+        let timer;
+        
+        // Récupérer le meilleur score
+        let highScore = localStorage.getItem('clicRapideHighScore') || 0;
+        document.getElementById('menu-high-score').innerText = highScore;
+
+        // Fonction pour passer du menu au jeu
+        function showGameScreen() {
+            document.getElementById('menu-screen').style.display = 'none';
+            document.getElementById('game-screen').style.display = 'block';
+            resetGameVariables();
+        }
+
+        // Fonction pour revenir au menu
+        function returnToMenu() {
+            clearInterval(timer);
+            gameActive = false;
+            document.getElementById('game-screen').style.display = 'none';
+            document.getElementById('menu-screen').style.display = 'block';
+            
+            // Met à jour l'affichage du score dans le menu au cas où un record a été battu
+            document.getElementById('menu-high-score').innerText = highScore;
+        }
+
+        function handleClick() {
+            // Démarre le chronomètre au premier clic sur "CLIQUEZ ICI"
+            if (!gameActive && timeLeft > 0) {
+                gameActive = true;
+                startTimer();
+            }
+            if (gameActive) {
+                score++;
+                document.getElementById('score').innerText = score;
+            }
+        }
+
+        function startTimer() {
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('time').innerText = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    gameActive = false;
+                    document.getElementById('click-btn').disabled = true;
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        function endGame() {
+            let message = "Temps écoulé ! Votre score est de : " + score + " clics.\n";
+            
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('clicRapideHighScore', highScore);
+                message += "🎉 INCROYABLE ! NOUVEAU RECORD ! 🎉";
+            } else {
+                message += "Le record à battre est de " + highScore + ".";
+            }
+            
+            setTimeout(() => {
+                alert(message);
+                returnToMenu(); // Retourne automatiquement au menu après l'alerte
+            }, 10);
+        }
+
+        function resetGameVariables() {
+            clearInterval(timer);
+            score = 0;
+            timeLeft = 30;
+            gameActive = false;
+            document.getElementById('score').innerText = score;
+            document.getElementById('time').innerText = timeLeft;
+            document.getElementById('click-btn').disabled = false;
+        }
+    </script>
+</body>
+</html>
