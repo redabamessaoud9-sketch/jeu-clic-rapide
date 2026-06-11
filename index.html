@@ -3,21 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clicker Master Pro - Édition Lumineuse</title>
+    <title>Clicker Master Pro - Giga Boutique</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* CONCEPTION VISUELLE : Style Premium Lumineux (SaaS Moderne)
-        */
         :root {
-            --bg-color: #f1f5f9;       /* Gris très clair / bleu de fond */
-            --card-bg: #ffffff;        /* Blanc pur pour les cartes */
-            --accent-color: #4f46e5;   /* Violet Indigo moderne */
-            --money-color: #10b981;    /* Vert Émeraude pour l'argent */
-            --text-color: #0f172a;     /* Ardoise sombre pour les textes principaux */
-            --secondary-text: #475569; /* Ardoise moyenne pour les descriptions */
-            --border-color: #e2e8f0;   /* Gris clair pour les séparations */
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --accent-color: #4f46e5;   /* Indigo */
+            --crit-color: #f59e0b;     /* Or/Ambre pour les critiques */
+            --money-color: #10b981;    /* Vert */
+            --text-color: #0f172a;
+            --secondary-text: #475569;
+            --border-color: #e2e8f0;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -34,23 +33,21 @@
             overflow: hidden;
         }
 
-        /* Conteneur Principal (Style Application Moderne) */
         .game-container {
             width: 90%;
             max-width: 1000px;
-            min-height: 550px;
+            min-height: 600px;
             background-color: var(--card-bg);
             position: relative;
             box-shadow: 0 20px 40px rgba(15, 23, 42, 0.06);
             display: none; 
-            padding: 50px;
+            padding: 40px;
             border-radius: 24px;
             border: 1px solid var(--border-color);
         }
 
         .game-container.active { display: flex; flex-direction: column; }
 
-        /* Effet de fondu en arrière-plan */
         .bg-gradient-blur {
             position: absolute;
             width: 400px;
@@ -62,18 +59,16 @@
             left: -100px;
         }
 
-        /* TYPOGRAPHIE */
         h1 { font-size: 56px; font-weight: 700; color: var(--text-color); line-height: 1.1; margin-bottom: 20px; }
         h1 span { color: var(--accent-color); }
-        h2.slide-title { font-size: 36px; color: var(--text-color); margin-bottom: 30px; }
+        h2.slide-title { font-size: 36px; color: var(--text-color); margin-bottom: 20px; }
         h2.slide-title span { color: var(--accent-color); }
         p { color: var(--secondary-text); font-size: 18px; max-width: 500px; line-height: 1.5; }
 
-        /* BOUTONS INTERACTIFS */
-        .btn-group { display: flex; gap: 15px; margin-top: 35px; z-index: 10; }
+        .btn-group { display: flex; gap: 15px; margin-top: 30px; z-index: 10; }
         
         button {
-            padding: 16px 32px;
+            padding: 14px 28px;
             font-size: 16px;
             font-weight: 600;
             font-family: 'Urbanist', sans-serif;
@@ -84,21 +79,19 @@
 
         .btn-primary { background-color: var(--accent-color); color: #ffffff; border: none; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2); }
         .btn-primary:hover { transform: translateY(-2px); filter: brightness(1.1); }
-        .btn-primary:active { transform: translateY(0); }
         
         .btn-secondary { background-color: transparent; color: var(--accent-color); border: 2px solid var(--accent-color); }
         .btn-secondary:hover { background-color: rgba(79, 70, 229, 0.05); }
 
-        .btn-buy { padding: 10px 20px; font-size: 14px; background-color: var(--accent-color); color: white; border: none; border-radius: 8px; }
+        .btn-buy { padding: 8px 16px; font-size: 14px; background-color: var(--accent-color); color: white; border: none; border-radius: 8px; width: 100px; }
         .btn-buy:disabled { background-color: #e2e8f0; color: #94a3b8; cursor: not-allowed; }
 
-        /* ÉCRAN 1 : MENU PRINCIPAL */
         .menu-layout { display: flex; flex-direction: row; justify-content: space-between; align-items: center; width: 100%; gap: 40px; }
         .stats-summary { background: var(--bg-color); padding: 35px; border-radius: 20px; min-width: 320px; border: 1px solid var(--border-color); }
         .money-tag { font-size: 48px; font-weight: 700; color: var(--money-color); margin: 5px 0; }
         .stat-item { font-size: 14px; color: var(--secondary-text); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
 
-        /* ÉCRAN 2 : ZONE DE JEU (PLEIN ÉCRAN CLAIR) */
+        /* ZONE DE JEU PLEIN ÉCRAN */
         #slide-game {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: linear-gradient(135deg, #e0e7ff 0%, #f1f5f9 100%);
@@ -111,6 +104,7 @@
         #instruction-text { font-size: 24px; font-weight: 700; color: var(--accent-color); letter-spacing: 1px; animation: pulse 1.5s infinite; }
         #live-score { font-size: 150px; font-weight: 800; color: var(--text-color); margin: -10px 0; }
         #timer-display { font-size: 24px; font-weight: 700; color: var(--secondary-text); }
+        #crit-alert { font-size: 28px; color: var(--crit-color); font-weight: 800; height: 35px; opacity: 0; transition: opacity 0.1s; }
 
         @keyframes pulse {
             0% { opacity: 0.6; transform: scale(0.98); }
@@ -118,11 +112,11 @@
             100% { opacity: 0.6; transform: scale(0.98); }
         }
 
-        /* ÉCRAN 3 : BOUTIQUE (TABLEAU) */
-        .table-container { width: 100%; margin-top: 10px; }
+        /* BOUTIQUE TABLEAU DÉFILANT */
+        .table-container { width: 100%; margin-top: 10px; max-height: 380px; overflow-y: auto; padding-right: 5px; }
         table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; padding: 15px; border-bottom: 2px solid var(--border-color); color: var(--secondary-text); font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
-        td { padding: 20px 15px; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+        th { text-align: left; padding: 12px; border-bottom: 2px solid var(--border-color); color: var(--secondary-text); font-size: 13px; text-transform: uppercase; }
+        td { padding: 15px 12px; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
         .item-name { font-size: 18px; font-weight: 700; color: var(--text-color); }
         .item-desc { font-size: 14px; color: var(--secondary-text); }
         .item-price { color: var(--money-color); font-weight: 700; font-size: 18px; }
@@ -140,7 +134,7 @@
         <div class="menu-layout">
             <div class="content-left">
                 <h1>Master<br><span>Clicker</span> Pro</h1>
-                <p style="margin-top: 10px;">Testez votre rapidité, accumulez des capitaux et débloquez des optimisations de performances matérielles.</p>
+                <p style="margin-top: 10px;">Devenez un investisseur du clic. Améliorez vos outils technologiques pour briser tous les records.</p>
                 <div class="btn-group">
                     <button class="btn-primary" onclick="showSlide('slide-game'); startGame();">Lancer Session</button>
                     <button class="btn-secondary" onclick="showSlide('slide-shop')">Boutique</button>
@@ -157,6 +151,7 @@
 
     <div id="slide-game" onmousedown="handleGameClick(event)">
         <div class="game-overlay">
+            <div id="crit-alert">COUP CRITIQUE !</div>
             <div id="instruction-text">CLIQUEZ N'IMPORTE OÙ POUR DÉMARRER</div>
             <div id="live-score">0</div>
             <div id="timer-display">TEMPS RESTANT : <span>30</span>S</div>
@@ -180,16 +175,16 @@
                     <tr>
                         <td>
                             <div class="item-name">Force de Frappe</div>
-                            <div class="item-desc">Multiplie la valeur physique de vos pressions.</div>
+                            <div class="item-desc">Augmente la valeur brute de chaque clic.</div>
                         </td>
-                        <td>+1 Point par clic</td>
+                        <td>+1 Pt / Clic</td>
                         <td class="item-price" id="price-click">50$</td>
                         <td><button class="btn-buy" id="buy-click" onclick="buyUpgrade('click')">Acheter</button></td>
                     </tr>
                     <tr>
                         <td>
                             <div class="item-name">Extension Temporelle</div>
-                            <div class="item-desc">Augmente la durée réglementaire d'une session.</div>
+                            <div class="item-desc">Rallonge la durée de la session de jeu.</div>
                         </td>
                         <td>+5 Secondes</td>
                         <td class="item-price" id="price-time">150$</td>
@@ -197,10 +192,37 @@
                     </tr>
                     <tr>
                         <td>
-                            <div class="item-name">Rendement Premium</div>
-                            <div class="item-desc">Indexation bonifiée de la conversion des points en argent.</div>
+                            <div class="item-name">Auto-Clicker IA</div>
+                            <div class="item-desc">Un script génère des points tout seul chaque seconde.</div>
                         </td>
-                        <td>Multiplicateur $ x1.5</td>
+                        <td>+3 Pts / sec</td>
+                        <td class="item-price" id="price-auto">200$</td>
+                        <td><button class="btn-buy" id="buy-auto" onclick="buyUpgrade('auto')">Acheter</button></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="item-name">Frappe Critique</div>
+                            <div class="item-desc">Donne une chance de faire un clic super puissant (x3).</div>
+                        </td>
+                        <td>+10% Chance</td>
+                        <td class="item-price" id="price-crit">250$</td>
+                        <td><button class="btn-buy" id="buy-crit" onclick="buyUpgrade('crit')">Acheter</button></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="item-name">Explosion de Combo</div>
+                            <div class="item-desc">Donne un énorme bonus de points tous les 50 clics.</div>
+                        </td>
+                        <td>+25 Pts / Combo</td>
+                        <td class="item-price" id="price-combo">300$</td>
+                        <td><button class="btn-buy" id="buy-combo" onclick="buyUpgrade('combo')">Acheter</button></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="item-name">Rendement Premium</div>
+                            <div class="item-desc">Augmente l'argent généré à la fin de la partie.</div>
+                        </td>
+                        <td>Argent x1.5</td>
                         <td class="item-price" id="price-conv">500$</td>
                         <td><button class="btn-buy" id="buy-conv" onclick="buyUpgrade('conv')">Acheter</button></td>
                     </tr>
@@ -216,12 +238,15 @@
     </div>
 
     <script>
-        // --- CHARGEMENT DU COMPTE ---
+        // --- CHARGEMENT DES DONNÉES ---
         let state = {
             money: parseInt(localStorage.getItem('lc_money')) || 0,
             highScore: parseInt(localStorage.getItem('lc_highscore')) || 0,
             clickBonus: parseInt(localStorage.getItem('lc_click_bonus')) || 0,
             timeBonus: parseInt(localStorage.getItem('lc_time_bonus')) || 0,
+            autoClicker: parseInt(localStorage.getItem('lc_auto_clicker')) || 0,
+            critLevel: parseInt(localStorage.getItem('lc_crit_level')) || 0,
+            comboLevel: parseInt(localStorage.getItem('lc_combo_level')) || 0,
             convLevel: parseInt(localStorage.getItem('lc_conv_level')) || 1
         };
 
@@ -229,8 +254,9 @@
         let timeLeft = 30;
         let gameActive = false;
         let gameTimer;
+        let passiveTimer;
+        let sessionClicks = 0; // Compteur pour le combo de la session active
 
-        // --- SYSTÈME DE NAVIGATION ---
         function showSlide(slideId) {
             document.querySelectorAll('.game-container, #slide-game').forEach(s => s.classList.remove('active'));
             document.getElementById(slideId).classList.add('active');
@@ -242,25 +268,38 @@
             document.getElementById('shop-money').innerText = state.money + "$";
             document.getElementById('menu-high-score').innerText = state.highScore;
             
-            let currentClickCost = 50 * (state.clickBonus + 1);
-            let currentTimeCost = 150 * (state.timeBonus + 1);
+            let costClick = 50 * (state.clickBonus + 1);
+            let costTime = 150 * (state.timeBonus + 1);
+            let costAuto = 200 * (state.autoClicker + 1);
+            let costCrit = 250 * (state.critLevel + 1);
+            let costCombo = 300 * (state.comboLevel + 1);
 
-            document.getElementById('price-click').innerText = currentClickCost + "$";
-            document.getElementById('price-time').innerText = currentTimeCost + "$";
+            document.getElementById('price-click').innerText = costClick + "$";
+            document.getElementById('price-time').innerText = costTime + "$";
+            document.getElementById('price-auto').innerText = costAuto + "$";
+            document.getElementById('price-crit').innerText = costCrit + "$";
+            document.getElementById('price-combo').innerText = costCombo + "$";
 
-            document.getElementById('buy-click').disabled = state.money < currentClickCost;
-            document.getElementById('buy-time').disabled = state.money < currentTimeCost;
+            document.getElementById('buy-click').disabled = state.money < costClick;
+            document.getElementById('buy-time').disabled = state.money < costTime;
+            document.getElementById('buy-auto').disabled = state.money < costAuto;
+            document.getElementById('buy-crit').disabled = state.money < costCrit || state.critLevel >= 5; // Max 50% chance
+            document.getElementById('buy-combo').disabled = state.money < costCombo;
             document.getElementById('buy-conv').disabled = state.money < 500 || state.convLevel > 1;
+
+            if(state.critLevel >= 5) document.getElementById('price-crit').innerText = "MAX";
         }
 
-        // --- GESTION DE SESSION ---
+        // --- EN JEU ---
         function startGame() {
             score = 0;
+            sessionClicks = 0;
             timeLeft = 30 + (state.timeBonus * 5);
             gameActive = false;
             document.getElementById('live-score').innerText = "0";
             document.getElementById('timer-display').querySelector('span').innerText = timeLeft;
             document.getElementById('instruction-text').style.display = "block";
+            document.getElementById('crit-alert').style.opacity = "0";
             
             const music = document.getElementById('bg-music');
             music.currentTime = 0;
@@ -268,32 +307,37 @@
         }
 
         function handleGameClick(e) {
-            if (e.target.tagName === 'BUTTON') return; // Bloque le déclenchement sur le bouton abandonner
+            if (e.target.tagName === 'BUTTON') return;
 
             if (!gameActive) {
                 gameActive = true;
                 document.getElementById('instruction-text').style.display = "none";
                 startCountdown();
+                startPassivePoints();
             }
             
-            score += (1 + state.clickBonus);
+            sessionClicks++;
+            let clickValue = 1 + state.clickBonus;
+            let isCrit = false;
+
+            // Logique de coup critique (Max 50% de chance au niveau 5)
+            let critChance = state.critLevel * 0.10; 
+            if (Math.random() < critChance) {
+                clickValue = clickValue * 3;
+                isCrit = true;
+                triggerCritVisual();
+            }
+
+            score += clickValue;
+
+            // Logique de combo (Tous les 50 clics physiques effectués)
+            if (state.comboLevel > 0 && sessionClicks % 50 === 0) {
+                score += (state.comboLevel * 25);
+                triggerComboVisual(e);
+            }
+
             document.getElementById('live-score').innerText = score;
-            
-            // Effet d'impact lumineux au clic
-            let circle = document.createElement('div');
-            circle.style.position = 'absolute';
-            circle.style.left = e.clientX + 'px';
-            circle.style.top = e.clientY + 'px';
-            circle.style.width = '20px'; circle.style.height = '20px';
-            circle.style.background = 'rgba(79, 70, 229, 0.4)';
-            circle.style.borderRadius = '50%';
-            circle.style.transform = 'translate(-50%, -50%)';
-            circle.style.pointerEvents = 'none';
-            circle.style.transition = 'all 0.4s cubic-bezier(0.1, 0.8, 0.3, 1)';
-            document.body.appendChild(circle);
-            
-            setTimeout(() => { circle.style.transform = 'translate(-50%, -50%) scale(4)'; circle.style.opacity = '0'; }, 10);
-            setTimeout(() => circle.remove(), 400);
+            createClickEffect(e, isCrit);
         }
 
         function startCountdown() {
@@ -301,13 +345,66 @@
                 timeLeft--;
                 document.getElementById('timer-display').querySelector('span').innerText = timeLeft;
                 if (timeLeft <= 0) {
-                    clearInterval(gameTimer);
                     endSession();
                 }
             }, 1000);
         }
 
+        // Logique de l'Auto-Clicker passif
+        function startPassivePoints() {
+            if (state.autoClicker > 0) {
+                passiveTimer = setInterval(() => {
+                    score += (state.autoClicker * 3);
+                    document.getElementById('live-score').innerText = score;
+                }, 1000);
+            }
+        }
+
+        function triggerCritVisual() {
+            let alert = document.getElementById('crit-alert');
+            alert.style.opacity = "1";
+            setTimeout(() => alert.style.opacity = "0", 300);
+        }
+
+        function triggerComboVisual(e) {
+            let comboText = document.createElement('div');
+            comboText.innerText = `COMBO +${state.comboLevel * 25}!`;
+            comboText.style.position = 'absolute';
+            comboText.style.left = '50%';
+            comboText.style.top = '25%';
+            comboText.style.transform = 'translate(-50%, -50%)';
+            comboText.style.fontSize = '32px';
+            comboText.style.fontWeight = '900';
+            comboText.style.color = '#3b82f6';
+            comboText.style.pointerEvents = 'none';
+            document.body.appendChild(comboText);
+            setTimeout(() => comboText.remove(), 600);
+        }
+
+        function createClickEffect(e, isCrit) {
+            let circle = document.createElement('div');
+            circle.style.position = 'absolute';
+            circle.style.left = e.clientX + 'px';
+            circle.style.top = e.clientY + 'px';
+            circle.style.width = isCrit ? '35px' : '20px'; 
+            circle.style.height = isCrit ? '35px' : '20px';
+            circle.style.background = isCrit ? 'rgba(245, 158, 11, 0.6)' : 'rgba(79, 70, 229, 0.4)';
+            circle.style.borderRadius = '50%';
+            circle.style.transform = 'translate(-50%, -50%)';
+            circle.style.pointerEvents = 'none';
+            circle.style.transition = 'all 0.4s cubic-bezier(0.1, 0.8, 0.3, 1)';
+            document.body.appendChild(circle);
+            
+            setTimeout(() => { 
+                circle.style.transform = 'translate(-50%, -50%) scale(4)'; 
+                circle.style.opacity = '0'; 
+            }, 10);
+            setTimeout(() => circle.remove(), 400);
+        }
+
         function endSession() {
+            clearInterval(gameTimer);
+            clearInterval(passiveTimer);
             gameActive = false;
             document.getElementById('bg-music').pause();
 
@@ -322,50 +419,50 @@
 
             localStorage.setItem('lc_money', state.money);
             
-            alert(`SESSION TERMINÉE !\nScore total : ${score} points\nDividendes générés : ${earnedMoney}$`);
+            alert(`SESSION TERMINÉE !\nPoints récoltés : ${score}\nArgent généré : ${earnedMoney}$`);
             showSlide('slide-menu');
         }
 
         function quitGame(e) {
             e.stopPropagation();
             clearInterval(gameTimer);
+            clearInterval(passiveTimer);
             gameActive = false;
             document.getElementById('bg-music').pause();
             showSlide('slide-menu');
         }
 
-        // --- LOGIQUE COMMERCIAL (BOUTIQUE) ---
+        // --- SYSTEM DE BOUTIQUE ---
         function buyUpgrade(type) {
-            if (type === 'click') {
-                let cost = 50 * (state.clickBonus + 1);
-                if (state.money >= cost) {
-                    state.money -= cost;
-                    state.clickBonus++;
-                    localStorage.setItem('lc_money', state.money);
-                    localStorage.setItem('lc_click_bonus', state.clickBonus);
-                }
-            } else if (type === 'time') {
-                let cost = 150 * (state.timeBonus + 1);
-                if (state.money >= cost) {
-                    state.money -= cost;
-                    state.timeBonus++;
-                    localStorage.setItem('lc_money', state.money);
-                    localStorage.setItem('lc_time_bonus', state.timeBonus);
-                }
-            } else if (type === 'conv') {
-                if (state.money >= 500) {
-                    state.money -= 500;
-                    state.convLevel = 2;
-                    localStorage.setItem('lc_money', state.money);
-                    localStorage.setItem('lc_conv_level', 2);
-                }
+            let cost = 0;
+            if (type === 'click') cost = 50 * (state.clickBonus + 1);
+            if (type === 'time') cost = 150 * (state.timeBonus + 1);
+            if (type === 'auto') cost = 200 * (state.autoClicker + 1);
+            if (type === 'crit') cost = 250 * (state.critLevel + 1);
+            if (type === 'combo') cost = 300 * (state.comboLevel + 1);
+            if (type === 'conv') cost = 500;
+
+            if (state.money >= cost) {
+                state.money -= cost;
+                if (type === 'click') state.clickBonus++;
+                if (type === 'time') state.timeBonus++;
+                if (type === 'auto') state.autoClicker++;
+                if (type === 'crit') state.critLevel++;
+                if (type === 'combo') state.comboLevel++;
+                if (type === 'conv') state.convLevel = 2;
+
+                localStorage.setItem('lc_money', state.money);
+                localStorage.setItem('lc_click_bonus', state.clickBonus);
+                localStorage.setItem('lc_time_bonus', state.timeBonus);
+                localStorage.setItem('lc_auto_clicker', state.autoClicker);
+                localStorage.setItem('lc_crit_level', state.critLevel);
+                localStorage.setItem('lc_combo_level', state.comboLevel);
+                localStorage.setItem('lc_conv_level', state.convLevel);
             }
             updateUI();
         }
 
-        // Lancement initial de l'interface
         updateUI();
-
     </script>
 </body>
 </html>
