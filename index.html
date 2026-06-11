@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Jeu de Clic Rapide</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding-top: 50px; background-color: #f0f2f5; }
+        #game-area { margin-top: 20px; }
+        #click-btn { padding: 20px 40px; font-size: 24px; cursor: pointer; background-color: #007bff; color: white; border: none; border-radius: 8px; }
+        #click-btn:disabled { background-color: #ccc; }
+        .stats { font-size: 20px; margin: 10px; }
+    </style>
+</head>
+<body>
+
+    <h1>Test de Clic Rapide</h1>
+    <div class="stats">Temps restant : <span id="time">30</span>s</div>
+    <div class="stats">Score : <span id="score">0</span></div>
+
+    <div id="game-area">
+        <button id="click-btn" onclick="handleClick()">CLIQUEZ ICI !</button>
+        <br><br>
+        <button onclick="resetGame()">Réinitialiser</button>
+    </div>
+
+    <script>
+        let score = 0;
+        let timeLeft = 30;
+        let gameActive = false;
+        let timer;
+
+        function handleClick() {
+            if (!gameActive && timeLeft > 0) {
+                gameActive = true;
+                startTimer();
+            }
+            if (gameActive) {
+                score++;
+                document.getElementById('score').innerText = score;
+            }
+        }
+
+        function startTimer() {
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('time').innerText = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    gameActive = false;
+                    document.getElementById('click-btn').disabled = true;
+                    alert("Temps écoulé ! Votre score final est de : " + score + " clics.");
+                }
+            }, 1000);
+        }
+
+        function resetGame() {
+            clearInterval(timer);
+            score = 0;
+            timeLeft = 30;
+            gameActive = false;
+            document.getElementById('score').innerText = score;
+            document.getElementById('time').innerText = timeLeft;
+            document.getElementById('click-btn').disabled = false;
+        }
+    </script>
+</body>
+</html>
