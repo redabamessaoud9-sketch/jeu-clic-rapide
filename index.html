@@ -3,234 +3,369 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jeu de Clic Rapide</title>
+    <title>Clicker Master Pro - Édition Lumineuse</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* Arrière-plan global */
+        /* CONCEPTION VISUELLE : Style Premium Lumineux (SaaS Moderne)
+        */
+        :root {
+            --bg-color: #f1f5f9;       /* Gris très clair / bleu de fond */
+            --card-bg: #ffffff;        /* Blanc pur pour les cartes */
+            --accent-color: #4f46e5;   /* Violet Indigo moderne */
+            --money-color: #10b981;    /* Vert Émeraude pour l'argent */
+            --text-color: #0f172a;     /* Ardoise sombre pour les textes principaux */
+            --secondary-text: #475569; /* Ardoise moyenne pour les descriptions */
+            --border-color: #e2e8f0;   /* Gris clair pour les séparations */
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
+            background-color: var(--bg-color);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #74ebd5 0%, #9face6 100%);
-            color: #333;
+            min-height: 100vh;
+            font-family: 'Urbanist', sans-serif;
+            color: var(--text-color);
             overflow: hidden;
         }
 
-        /* Conteneur du menu */
-        #menu-screen {
-            background: rgba(255, 255, 255, 0.85);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            backdrop-filter: blur(10px);
-            max-width: 400px;
+        /* Conteneur Principal (Style Application Moderne) */
+        .game-container {
             width: 90%;
-            z-index: 10;
+            max-width: 1000px;
+            min-height: 550px;
+            background-color: var(--card-bg);
+            position: relative;
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.06);
+            display: none; 
+            padding: 50px;
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
         }
 
-        h1 { margin-top: 0; color: #2c3e50; }
-        p { color: #555; font-size: 18px; }
-        
-        .high-score { color: #e74c3c; font-size: 26px; margin: 25px 0; font-weight: bold; }
-        
-        /* Bouton pour démarrer */
-        #start-btn {
-            padding: 15px 30px;
-            font-size: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            background-color: #9b59b6;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 5px #8e44ad;
-            transition: transform 0.1s, background-color 0.3s;
-        }
-        #start-btn:active { transform: translateY(4px); box-shadow: 0 1px #8e44ad; }
-        #start-btn:hover { background-color: #8e44ad; }
+        .game-container.active { display: flex; flex-direction: column; }
 
-        /* ÉCRAN DE JEU FULL SCREEN */
-        #game-screen {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            width: 100vw;
-            height: 100vh;
-            cursor: crosshair;
-            z-index: 5;
-        }
-
-        /* Zone de texte au centre de l'écran pendant le jeu */
-        #game-info {
+        /* Effet de fondu en arrière-plan */
+        .bg-gradient-blur {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 40px;
-            font-weight: bold;
-            color: white;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(79, 70, 229, 0.08) 0%, transparent 70%);
+            z-index: 0;
             pointer-events: none;
-            width: 100%;
+            top: -100px;
+            left: -100px;
         }
 
-        #score-display { font-size: 80px; color: #fff; margin-top: 10px; }
-        #instruction { font-size: 30px; animation: pulse 1.5s infinite; }
+        /* TYPOGRAPHIE */
+        h1 { font-size: 56px; font-weight: 700; color: var(--text-color); line-height: 1.1; margin-bottom: 20px; }
+        h1 span { color: var(--accent-color); }
+        h2.slide-title { font-size: 36px; color: var(--text-color); margin-bottom: 30px; }
+        h2.slide-title span { color: var(--accent-color); }
+        p { color: var(--secondary-text); font-size: 18px; max-width: 500px; line-height: 1.5; }
+
+        /* BOUTONS INTERACTIFS */
+        .btn-group { display: flex; gap: 15px; margin-top: 35px; z-index: 10; }
+        
+        button {
+            padding: 16px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Urbanist', sans-serif;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary { background-color: var(--accent-color); color: #ffffff; border: none; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2); }
+        .btn-primary:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        .btn-primary:active { transform: translateY(0); }
+        
+        .btn-secondary { background-color: transparent; color: var(--accent-color); border: 2px solid var(--accent-color); }
+        .btn-secondary:hover { background-color: rgba(79, 70, 229, 0.05); }
+
+        .btn-buy { padding: 10px 20px; font-size: 14px; background-color: var(--accent-color); color: white; border: none; border-radius: 8px; }
+        .btn-buy:disabled { background-color: #e2e8f0; color: #94a3b8; cursor: not-allowed; }
+
+        /* ÉCRAN 1 : MENU PRINCIPAL */
+        .menu-layout { display: flex; flex-direction: row; justify-content: space-between; align-items: center; width: 100%; gap: 40px; }
+        .stats-summary { background: var(--bg-color); padding: 35px; border-radius: 20px; min-width: 320px; border: 1px solid var(--border-color); }
+        .money-tag { font-size: 48px; font-weight: 700; color: var(--money-color); margin: 5px 0; }
+        .stat-item { font-size: 14px; color: var(--secondary-text); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+
+        /* ÉCRAN 2 : ZONE DE JEU (PLEIN ÉCRAN CLAIR) */
+        #slide-game {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(135deg, #e0e7ff 0%, #f1f5f9 100%);
+            cursor: crosshair; z-index: 100; display: none;
+            align-items: center; justify-content: center;
+        }
+        #slide-game.active { display: flex; }
+        
+        .game-overlay { pointer-events: none; text-align: center; }
+        #instruction-text { font-size: 24px; font-weight: 700; color: var(--accent-color); letter-spacing: 1px; animation: pulse 1.5s infinite; }
+        #live-score { font-size: 150px; font-weight: 800; color: var(--text-color); margin: -10px 0; }
+        #timer-display { font-size: 24px; font-weight: 700; color: var(--secondary-text); }
 
         @keyframes pulse {
-            0% { opacity: 0.6; transform: scale(0.95); }
-            50% { opacity: 1; transform: scale(1.05); }
-            100% { opacity: 0.6; transform: scale(0.95); }
+            0% { opacity: 0.6; transform: scale(0.98); }
+            50% { opacity: 1; transform: scale(1.02); }
+            100% { opacity: 0.6; transform: scale(0.98); }
         }
 
-        /* Bouton Quitter */
-        #quit-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            box-shadow: 0 4px #c0392b;
-            z-index: 20;
-        }
-        #quit-btn:active { transform: translateY(2px); box-shadow: 0 2px #c0392b; }
+        /* ÉCRAN 3 : BOUTIQUE (TABLEAU) */
+        .table-container { width: 100%; margin-top: 10px; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 15px; border-bottom: 2px solid var(--border-color); color: var(--secondary-text); font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+        td { padding: 20px 15px; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+        .item-name { font-size: 18px; font-weight: 700; color: var(--text-color); }
+        .item-desc { font-size: 14px; color: var(--secondary-text); }
+        .item-price { color: var(--money-color); font-weight: 700; font-size: 18px; }
+
     </style>
 </head>
 <body>
 
     <audio id="bg-music" loop>
         <source src="musique.mp3" type="audio/mpeg">
-        Votre navigateur ne supporte pas l'audio.
     </audio>
 
-    <div id="menu-screen">
-        <h1>Test de Clic Rapide</h1>
-        <p>Avez-vous les doigts les plus rapides ? Vous avez 30 secondes.</p>
-        <div class="high-score">🏆 Meilleur Score : <br><span id="menu-high-score" style="font-size: 40px;">0</span></div>
-        <button id="start-btn" onclick="showGameScreen()">Commencer à jouer</button>
-    </div>
-
-    <div id="game-screen" onmousedown="handleClick(event)" ontouchstart="handleClick(event)">
-        
-        <button id="quit-btn" onclick="returnToMenu(event)">Quitter</button>
-
-        <div id="game-info">
-            <div id="instruction">CLIQUEZ N'IMPORTE OÙ POUR DÉMARRER</div>
-            
-            <div id="live-stats" style="display: none;">
-                <div>Temps : <span id="time">30</span>s</div>
-                <div id="score-display">0</div>
+    <div class="game-container active" id="slide-menu">
+        <div class="bg-gradient-blur"></div>
+        <div class="menu-layout">
+            <div class="content-left">
+                <h1>Master<br><span>Clicker</span> Pro</h1>
+                <p style="margin-top: 10px;">Testez votre rapidité, accumulez des capitaux et débloquez des optimisations de performances matérielles.</p>
+                <div class="btn-group">
+                    <button class="btn-primary" onclick="showSlide('slide-game'); startGame();">Lancer Session</button>
+                    <button class="btn-secondary" onclick="showSlide('slide-shop')">Boutique</button>
+                </div>
+            </div>
+            <div class="stats-summary">
+                <div class="stat-item">Portefeuille Disponible</div>
+                <div class="money-tag" id="menu-money">0$</div>
+                <div class="stat-item" style="margin-top: 25px;">Record Établi</div>
+                <div style="font-size: 22px; font-weight: 700; color: var(--text-color); margin-top: 5px;"><span id="menu-high-score">0</span> Clics</div>
             </div>
         </div>
+    </div>
 
+    <div id="slide-game" onmousedown="handleGameClick(event)">
+        <div class="game-overlay">
+            <div id="instruction-text">CLIQUEZ N'IMPORTE OÙ POUR DÉMARRER</div>
+            <div id="live-score">0</div>
+            <div id="timer-display">TEMPS RESTANT : <span>30</span>S</div>
+        </div>
+        <button class="btn-secondary" style="position: absolute; top: 30px; right: 30px; background: white;" onclick="quitGame(event)">Abandonner</button>
+    </div>
+
+    <div class="game-container" id="slide-shop">
+        <h2 class="slide-title">Boutique d'<span>Améliorations</span></h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Amélioration</th>
+                        <th>Effet</th>
+                        <th>Coût</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="item-name">Force de Frappe</div>
+                            <div class="item-desc">Multiplie la valeur physique de vos pressions.</div>
+                        </td>
+                        <td>+1 Point par clic</td>
+                        <td class="item-price" id="price-click">50$</td>
+                        <td><button class="btn-buy" id="buy-click" onclick="buyUpgrade('click')">Acheter</button></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="item-name">Extension Temporelle</div>
+                            <div class="item-desc">Augmente la durée réglementaire d'une session.</div>
+                        </td>
+                        <td>+5 Secondes</td>
+                        <td class="item-price" id="price-time">150$</td>
+                        <td><button class="btn-buy" id="buy-time" onclick="buyUpgrade('time')">Acheter</button></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="item-name">Rendement Premium</div>
+                            <div class="item-desc">Indexation bonifiée de la conversion des points en argent.</div>
+                        </td>
+                        <td>Multiplicateur $ x1.5</td>
+                        <td class="item-price" id="price-conv">500$</td>
+                        <td><button class="btn-buy" id="buy-conv" onclick="buyUpgrade('conv')">Acheter</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="btn-group" style="align-items: center; width: 100%;">
+            <button class="btn-secondary" onclick="showSlide('slide-menu')">Retour</button>
+            <div style="margin-left: auto; font-size: 20px; font-weight: 700; color: var(--text-color);">
+                SOLDE : <span id="shop-money" style="color: var(--money-color);">0$</span>
+            </div>
+        </div>
     </div>
 
     <script>
+        // --- CHARGEMENT DU COMPTE ---
+        let state = {
+            money: parseInt(localStorage.getItem('lc_money')) || 0,
+            highScore: parseInt(localStorage.getItem('lc_highscore')) || 0,
+            clickBonus: parseInt(localStorage.getItem('lc_click_bonus')) || 0,
+            timeBonus: parseInt(localStorage.getItem('lc_time_bonus')) || 0,
+            convLevel: parseInt(localStorage.getItem('lc_conv_level')) || 1
+        };
+
         let score = 0;
         let timeLeft = 30;
         let gameActive = false;
-        let timer;
-        
-        // Récupérer la musique
-        const bgMusic = document.getElementById('bg-music');
-        bgMusic.volume = 0.5; // Règle le volume à 50%
-        
-        // Récupérer le meilleur score
-        let highScore = localStorage.getItem('clicRapideHighScore') || 0;
-        document.getElementById('menu-high-score').innerText = highScore;
+        let gameTimer;
 
-        function showGameScreen() {
-            document.getElementById('menu-screen').style.display = 'none';
-            document.getElementById('game-screen').style.display = 'block';
-            resetGameVariables();
-            
-            // Démarre la musique
-            bgMusic.play().catch(error => console.log("L'autoplay audio a été bloqué.", error));
+        // --- SYSTÈME DE NAVIGATION ---
+        function showSlide(slideId) {
+            document.querySelectorAll('.game-container, #slide-game').forEach(s => s.classList.remove('active'));
+            document.getElementById(slideId).classList.add('active');
+            updateUI();
         }
 
-        function returnToMenu(event) {
-            if(event) event.stopPropagation(); 
+        function updateUI() {
+            document.getElementById('menu-money').innerText = state.money + "$";
+            document.getElementById('shop-money').innerText = state.money + "$";
+            document.getElementById('menu-high-score').innerText = state.highScore;
             
-            clearInterval(timer);
+            let currentClickCost = 50 * (state.clickBonus + 1);
+            let currentTimeCost = 150 * (state.timeBonus + 1);
+
+            document.getElementById('price-click').innerText = currentClickCost + "$";
+            document.getElementById('price-time').innerText = currentTimeCost + "$";
+
+            document.getElementById('buy-click').disabled = state.money < currentClickCost;
+            document.getElementById('buy-time').disabled = state.money < currentTimeCost;
+            document.getElementById('buy-conv').disabled = state.money < 500 || state.convLevel > 1;
+        }
+
+        // --- GESTION DE SESSION ---
+        function startGame() {
+            score = 0;
+            timeLeft = 30 + (state.timeBonus * 5);
             gameActive = false;
+            document.getElementById('live-score').innerText = "0";
+            document.getElementById('timer-display').querySelector('span').innerText = timeLeft;
+            document.getElementById('instruction-text').style.display = "block";
             
-            // Arrête et réinitialise la musique
-            bgMusic.pause();
-            bgMusic.currentTime = 0;
-
-            document.getElementById('game-screen').style.display = 'none';
-            document.getElementById('menu-screen').style.display = 'block';
-            document.getElementById('menu-high-score').innerText = highScore;
+            const music = document.getElementById('bg-music');
+            music.currentTime = 0;
+            music.play().catch(e => {});
         }
 
-        function handleClick(event) {
-            if (event.target.id === 'quit-btn') return;
+        function handleGameClick(e) {
+            if (e.target.tagName === 'BUTTON') return; // Bloque le déclenchement sur le bouton abandonner
 
-            if (!gameActive && timeLeft > 0) {
+            if (!gameActive) {
                 gameActive = true;
-                document.getElementById('instruction').style.display = 'none';
-                document.getElementById('live-stats').style.display = 'block';
-                startTimer();
+                document.getElementById('instruction-text').style.display = "none";
+                startCountdown();
             }
-
-            if (gameActive) {
-                score++;
-                document.getElementById('score-display').innerText = score;
-            }
+            
+            score += (1 + state.clickBonus);
+            document.getElementById('live-score').innerText = score;
+            
+            // Effet d'impact lumineux au clic
+            let circle = document.createElement('div');
+            circle.style.position = 'absolute';
+            circle.style.left = e.clientX + 'px';
+            circle.style.top = e.clientY + 'px';
+            circle.style.width = '20px'; circle.style.height = '20px';
+            circle.style.background = 'rgba(79, 70, 229, 0.4)';
+            circle.style.borderRadius = '50%';
+            circle.style.transform = 'translate(-50%, -50%)';
+            circle.style.pointerEvents = 'none';
+            circle.style.transition = 'all 0.4s cubic-bezier(0.1, 0.8, 0.3, 1)';
+            document.body.appendChild(circle);
+            
+            setTimeout(() => { circle.style.transform = 'translate(-50%, -50%) scale(4)'; circle.style.opacity = '0'; }, 10);
+            setTimeout(() => circle.remove(), 400);
         }
 
-        function startTimer() {
-            timer = setInterval(() => {
+        function startCountdown() {
+            gameTimer = setInterval(() => {
                 timeLeft--;
-                document.getElementById('time').innerText = timeLeft;
-                
+                document.getElementById('timer-display').querySelector('span').innerText = timeLeft;
                 if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    gameActive = false;
-                    endGame();
+                    clearInterval(gameTimer);
+                    endSession();
                 }
             }, 1000);
         }
 
-        function endGame() {
-            let message = "Temps écoulé ! Votre score est de : " + score + " clics.\n";
+        function endSession() {
+            gameActive = false;
+            document.getElementById('bg-music').pause();
+
+            let multiplier = state.convLevel === 1 ? 1 : 1.5;
+            let earnedMoney = Math.floor(score * multiplier);
+            state.money += earnedMoney;
             
-            if (score > highScore) {
-                highScore = score;
-                localStorage.setItem('clicRapideHighScore', highScore);
-                message += "🎉 INCROYABLE ! NOUVEAU RECORD ! 🎉";
-            } else {
-                message += "Le record à battre est de " + highScore + ".";
+            if (score > state.highScore) {
+                state.highScore = score;
+                localStorage.setItem('lc_highscore', state.highScore);
             }
+
+            localStorage.setItem('lc_money', state.money);
             
-            setTimeout(() => {
-                alert(message);
-                returnToMenu(); 
-            }, 50); 
+            alert(`SESSION TERMINÉE !\nScore total : ${score} points\nDividendes générés : ${earnedMoney}$`);
+            showSlide('slide-menu');
         }
 
-        function resetGameVariables() {
-            clearInterval(timer);
-            score = 0;
-            timeLeft = 30;
+        function quitGame(e) {
+            e.stopPropagation();
+            clearInterval(gameTimer);
             gameActive = false;
-            
-            document.getElementById('score-display').innerText = score;
-            document.getElementById('time').innerText = timeLeft;
-            document.getElementById('instruction').style.display = 'block';
-            document.getElementById('live-stats').style.display = 'none';
+            document.getElementById('bg-music').pause();
+            showSlide('slide-menu');
         }
+
+        // --- LOGIQUE COMMERCIAL (BOUTIQUE) ---
+        function buyUpgrade(type) {
+            if (type === 'click') {
+                let cost = 50 * (state.clickBonus + 1);
+                if (state.money >= cost) {
+                    state.money -= cost;
+                    state.clickBonus++;
+                    localStorage.setItem('lc_money', state.money);
+                    localStorage.setItem('lc_click_bonus', state.clickBonus);
+                }
+            } else if (type === 'time') {
+                let cost = 150 * (state.timeBonus + 1);
+                if (state.money >= cost) {
+                    state.money -= cost;
+                    state.timeBonus++;
+                    localStorage.setItem('lc_money', state.money);
+                    localStorage.setItem('lc_time_bonus', state.timeBonus);
+                }
+            } else if (type === 'conv') {
+                if (state.money >= 500) {
+                    state.money -= 500;
+                    state.convLevel = 2;
+                    localStorage.setItem('lc_money', state.money);
+                    localStorage.setItem('lc_conv_level', 2);
+                }
+            }
+            updateUI();
+        }
+
+        // Lancement initial de l'interface
+        updateUI();
+
     </script>
 </body>
 </html>
