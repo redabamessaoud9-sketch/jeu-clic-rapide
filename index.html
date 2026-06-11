@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jeu de Clic Rapide</title>
     <style>
-        /* Arrière-plan global avec un dégradé coloré */
+        /* Arrière-plan global */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             text-align: center;
@@ -20,7 +20,7 @@
             color: #333;
         }
 
-        /* Conteneur principal avec effet "verre" (Glassmorphism) */
+        /* Conteneur principal */
         #game-container {
             background: rgba(255, 255, 255, 0.85);
             padding: 40px;
@@ -32,11 +32,34 @@
         }
 
         h1 { margin-top: 0; color: #2c3e50; }
+        p { color: #555; font-size: 18px; }
         
         .stats { font-size: 22px; margin: 15px 0; font-weight: bold; }
-        .high-score { color: #e74c3c; /* Rouge pour mettre en évidence le record */ }
+        .high-score { color: #e74c3c; font-size: 26px; margin-bottom: 25px; }
         
-        /* Bouton de clic stylisé avec animation au clic */
+        /* Boutons */
+        button {
+            font-family: inherit;
+            transition: transform 0.1s, background-color 0.3s, box-shadow 0.1s;
+            user-select: none;
+        }
+
+        #start-btn {
+            padding: 15px 30px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: #9b59b6;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px #8e44ad;
+            margin-top: 10px;
+        }
+
+        #start-btn:active { transform: translateY(4px); box-shadow: 0 1px #8e44ad; }
+        #start-btn:hover { background-color: #8e44ad; }
+
         #click-btn {
             padding: 25px 40px;
             font-size: 28px;
@@ -47,16 +70,11 @@
             border: none;
             border-radius: 12px;
             box-shadow: 0 6px #2980b9;
-            transition: transform 0.1s, box-shadow 0.1s;
             margin: 20px 0;
-            user-select: none; /* Empêche la sélection du texte en cliquant vite */
             width: 100%;
         }
 
-        #click-btn:active {
-            transform: translateY(4px);
-            box-shadow: 0 2px #2980b9;
-        }
+        #click-btn:active { transform: translateY(4px); box-shadow: 0 2px #2980b9; }
 
         #click-btn:disabled {
             background-color: #bdc3c7;
@@ -68,97 +86,6 @@
         #reset-btn {
             padding: 12px 24px;
             font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            background-color: #2ecc71;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            transition: background-color 0.3s;
-        }
+            font-weight: bold
 
-        #reset-btn:hover { background-color: #27ae60; }
-    </style>
-</head>
-<body>
-
-    <div id="game-container">
-        <h1>Test de Clic Rapide</h1>
-        <div class="stats high-score">Meilleur Score : <span id="high-score">0</span></div>
-        <div class="stats">Temps restant : <span id="time">30</span>s</div>
-        <div class="stats">Score Actuel : <span id="score">0</span></div>
-
-        <div id="game-area">
-            <button id="click-btn" onclick="handleClick()">CLIQUEZ ICI !</button>
-            <br><br>
-            <button id="reset-btn" onclick="resetGame()">Réinitialiser</button>
-        </div>
-    </div>
-
-    <script>
-        let score = 0;
-        let timeLeft = 30;
-        let gameActive = false;
-        let timer;
-        
-        // Récupérer le meilleur score sauvegardé dans le navigateur, ou 0 s'il n'y en a pas
-        let highScore = localStorage.getItem('clicRapideHighScore') || 0;
-        document.getElementById('high-score').innerText = highScore;
-
-        function handleClick() {
-            // Démarre le chronomètre au tout premier clic
-            if (!gameActive && timeLeft > 0) {
-                gameActive = true;
-                startTimer();
-            }
-            // Incrémente le score si le jeu est actif
-            if (gameActive) {
-                score++;
-                document.getElementById('score').innerText = score;
-            }
-        }
-
-        function startTimer() {
-            timer = setInterval(() => {
-                timeLeft--;
-                document.getElementById('time').innerText = timeLeft;
-                
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    gameActive = false;
-                    document.getElementById('click-btn').disabled = true;
-                    endGame();
-                }
-            }, 1000);
-        }
-
-        function endGame() {
-            let message = "Temps écoulé ! Votre score est de : " + score + " clics.\n";
-            
-            // Vérifie si le joueur a battu son record
-            if (score > highScore) {
-                highScore = score;
-                localStorage.setItem('clicRapideHighScore', highScore); // Sauvegarde le nouveau record
-                document.getElementById('high-score').innerText = highScore;
-                message += "🎉 INCROYABLE ! NOUVEAU RECORD ! 🎉";
-            } else {
-                message += "Le record à battre est de " + highScore + ".";
-            }
-            
-            // Petit délai pour laisser l'interface se figer avant l'alerte
-            setTimeout(() => alert(message), 10);
-        }
-
-        function resetGame() {
-            clearInterval(timer);
-            score = 0;
-            timeLeft = 30;
-            gameActive = false;
-            document.getElementById('score').innerText = score;
-            document.getElementById('time').innerText = timeLeft;
-            document.getElementById('click-btn').disabled = false;
-        }
-    </script>
-</body>
-</html>
 
